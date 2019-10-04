@@ -1,14 +1,7 @@
 import React from 'react';
+import _ from 'lodash';
 import Component from './Component';
 import PropTypes from 'prop-types';
-
-
-const mockData = [
-  { value: -73.3471584187495, timestamp: 1570191003405 },
-  { value: 92.4158657302873, timestamp: 1570191009549 },
-  { value: 53.933803680902, timestamp: 1570191016939 },
-  { value: 62.728641927398684, timestamp: 1570191022236},
-];
 
 export const generateLines = (data, divider) => {
   if(!data.length) return [];
@@ -48,11 +41,18 @@ export const getScale = graphData => {
   return DEFAULT_DIVIDER;
 };
 
+export const timeScaling = divider =>
+  _.range(0, 1300, 100).map(e => ({
+    x: e,
+    second: e / (1000 / divider),
+  }));
+
 const Wrapper = ({ graphData }) => {
   const scaleDivider = getScale(graphData);
   const lines = generateLines(graphData, scaleDivider);
+  const secondsScale = timeScaling(scaleDivider);
   return (
-    <Component lines={lines}/>
+    <Component lines={lines} secondsScale={secondsScale}/>
   )
 };
 

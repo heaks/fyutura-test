@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import ENUM from './ENUM';
 import styles from '../styles';
 
-const LineChart = ({ lines }) => (
+const LineChart = ({ lines, secondsScale }) => (
   <div>
     <p style={styles.title}>Changes Over Time</p>
     <svg
@@ -65,6 +65,18 @@ const LineChart = ({ lines }) => (
           </text>
         ))
       }
+      {
+        secondsScale.map((e, i) => (
+          <text
+            key={i}
+            x={ENUM.PADDING + e.x}
+            y={570}
+            style={styles.scale}
+          >
+            {`${e.second}s`}
+          </text>
+        ))
+      }
     </svg>
   </div>
 );
@@ -76,6 +88,12 @@ LineChart.propTypes = {
     y1: PropTypes.number.isRequired,
     y2: PropTypes.number.isRequired,
   })).isRequired,
+  secondsScale: PropTypes.arrayOf(
+    PropTypes.shape({
+      x: PropTypes.number.isRequired,
+      second: PropTypes.number.isRequired,
+    }),
+  ),
 };
 
 export default LineChart;

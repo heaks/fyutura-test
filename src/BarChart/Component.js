@@ -43,7 +43,7 @@ const BarChart = ({ groups }) => (
         }
       )}
       {
-        _.range(0, 36, 1).map((i) => (
+        _.range(0, 41, 1).map((i) => (
           <text
             key={i}
             x={ENUM.LEFT_PADDING + i * ENUM.STEP_WIDTH}
