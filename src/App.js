@@ -13,21 +13,28 @@ const showSnackbar = text =>
     textColor: '#ffffff',
   });
 
-const socket = io('http://localhost:3000');
-
-function App () {
+function App() {
   const [graphData, setGraphData] = useState([]);
   const [threshold, setThreshold] = useState(100);
 
   useEffect(() => {
+    const socket = io('http://localhost:3000');
     socket.on('data', (data) => {
-      if (data.value > threshold) {
-        showSnackbar(`Warning, the value is: ${data.value.toFixed(4)}`);
-      }
       setGraphData(value => [...value, data])
     });
-  }, [threshold]);
-
+    return () => socket.close();
+  }, []);
+  
+  useEffect(() => {
+    if (graphData.length === 0) {
+      return;
+    }
+    const lastChunk = graphData[graphData.length - 1];
+    if (lastChunk.value > threshold) {
+      showSnackbar(`Warning, the value is: ${lastChunk.value.toFixed(4)}`);
+    }
+  }, [graphData]);
+  
   return (
     <div className="App">
       <div style={{ textAlign: 'center' }}>
